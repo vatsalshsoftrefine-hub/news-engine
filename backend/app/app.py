@@ -1,37 +1,46 @@
 from flask import Flask
-import logging
 from config.settings import Config
+from utils.logger import setup_logger
 
 
 def create_app():
-    """
-    Application Factory Function
-    This creates and configures the Flask app instance
-    """
-
     app = Flask(__name__)
 
-    # Load configuration
+    # Load config
     app.config.from_object(Config)
 
-    # Setup logging
-    setup_logging(app)
+    # Setup logger
+    logger = setup_logger()
+    app.logger = logger
 
-    # Register routes (blueprints will come later)
+    logger.info("Application starting...")
+
+    # Register routes
     from routes.health import health_bp
     app.register_blueprint(health_bp)
+
+    # Register error handlers
+    register_error_handlers(app)
 
     return app
 
 
-def setup_logging(app):
+def register_error_handlers(app):
     """
-    Setup logging configuration for the application
+    Centralized error handling
     """
 
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(levelname)s - %(message)s"
-    )
+    @app.errorhandler(404)
+    def not_found(error):
+        return {
+            "status": "error",
+            "message": "Resource not found"
+        }, 404
 
-    app.logger.info("Logging is configured")
+    @app.errorhandler(500)
+    def internal_error(error):
+        app.logger.error(f"Internal Server Error: {error}")
+        return {
+            "status": "error",
+            "message": "Internal server error"
+        }, 500

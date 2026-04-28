@@ -1,16 +1,12 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint
+from utils.response import success_response
 
-# Blueprint for health routes
 health_bp = Blueprint("health", __name__)
 
 
 @health_bp.route("/health", methods=["GET"])
 def health_check():
-    """
-    Health check endpoint
-    Used to verify if the service is running
-    """
-    return jsonify({
-        "status": "ok",
-        "message": "News Engine is running"
-    }), 200
+    return success_response(
+        data={"service": "news-engine"},
+        message="Service is running"
+    ), 200

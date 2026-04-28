@@ -19,6 +19,9 @@ def create_app():
     from routes.health import health_bp
     app.register_blueprint(health_bp)
 
+    from routes.user import user_bp
+    app.register_blueprint(user_bp)
+
     # Register error handlers
     register_error_handlers(app)
 

@@ -24,15 +24,19 @@ def fetch_news_from_rss(url):
     articles = []
 
     for item in items:
-        article = {
-            "id": str(uuid.uuid4()),
-            "title": item.title.text if item.title else "",
-            "description": item.description.text if item.description else "",
-            "link": item.link.text if item.link else "",
-            "published_at": item.pubDate.text if item.pubDate else "",
-            "source": url,
-            "created_at": datetime.utcnow().isoformat()
-        }
+        article = {        
+           "id": str(uuid.uuid4()),
+           "title": item.title.text if item.title else "",
+           "description": item.description.text if item.description else "",
+           "link": item.link.text if item.link else "",
+           "published_at": item.pubDate.text if item.pubDate else "",
+           "source": url,
+           "category": categorize_article(               
+               item.title.text if item.title else "",
+               item.description.text if item.description else ""
+               ),
+               "created_at": datetime.utcnow().isoformat()
+}
 
         articles.append(article)
 
@@ -73,3 +77,24 @@ def article_exists(link):
             return True
 
     return False
+
+def categorize_article(title, description):
+    """
+    Basic keyword-based categorization
+    """
+
+    text = f"{title} {description}".lower()
+
+    if "ai" in text or "technology" in text or "software" in text:
+        return "technology"
+
+    elif "football" in text or "cricket" in text or "sports" in text:
+        return "sports"
+
+    elif "market" in text or "stock" in text or "business" in text:
+        return "business"
+
+    elif "election" in text or "government" in text or "politics" in text:
+        return "politics"
+
+    return "general"

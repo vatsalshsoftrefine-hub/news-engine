@@ -50,3 +50,6 @@ def register_error_handlers(app):
     
     from routes.news import news_bp
     app.register_blueprint(news_bp)
+
+    from routes.interest import interest_bp
+    app.register_blueprint(interest_bp)

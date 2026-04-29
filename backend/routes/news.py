@@ -3,6 +3,7 @@ from utils.response import success_response, error_response
 from services.news_services import fetch_news_from_rss, save_articles, get_news
 from services.interest_services import get_user_interests
 from services.news_services import get_relevant_news_for_user
+from services.trigger_services import get_triggered_news
 
 news_bp = Blueprint("news", __name__)
 
@@ -52,5 +53,11 @@ def relevant_news(user_id):
         return error_response("No interests found for user"), 404
 
     articles = get_relevant_news_for_user(user_id, interests)
+
+    return success_response(articles), 200
+
+@news_bp.route("/news/trigger/<user_id>", methods=["GET"])
+def trigger_news(user_id):
+    articles = get_triggered_news(user_id)
 
     return success_response(articles), 200

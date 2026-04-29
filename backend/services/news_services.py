@@ -158,3 +158,17 @@ def get_relevant_news_for_user(user_id, interests, limit=10):
     scored_articles.sort(key=lambda x: x["relevance_score"], reverse=True)
 
     return scored_articles[:limit]
+
+def filter_triggered_news(articles, threshold=2):
+    """
+    Filter only high relevance articles
+    """
+
+    triggered = []
+
+    for article in articles:
+        if article.get("relevance_score", 0) >= threshold:
+            article["triggered"] = True
+            triggered.append(article)
+
+    return triggered

@@ -4,6 +4,7 @@ from services.news_services import fetch_news_from_rss, save_articles, get_news
 from services.interest_services import get_user_interests
 from services.news_services import get_relevant_news_for_user
 from services.trigger_services import get_triggered_news
+from models.dynamodb import DynamoDBClient
 
 news_bp = Blueprint("news", __name__)
 
@@ -61,3 +62,16 @@ def trigger_news(user_id):
     articles = get_triggered_news(user_id)
 
     return success_response(articles), 200
+
+@news_bp.route("/news/history/<user_id>", methods=["GET"])
+def trigger_history(user_id):
+    db = DynamoDBClient()
+    table = db.get_table("triggers")
+
+    response = table.scan()
+    items = response.get("Items", [])
+
+    # Filter user-specific history
+    user_items = [item for item in items if item.get("user_id") == user_id]
+
+    return success_response(user_items), 200

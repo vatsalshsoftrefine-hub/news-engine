@@ -70,3 +70,27 @@ def create_interests_table():
 
     table.wait_until_exists()
     print("Interests table created")
+
+
+def create_triggers_table():
+    db = DynamoDBClient().dynamodb
+
+    existing_tables = db.meta.client.list_tables()["TableNames"]
+
+    if "triggers" in existing_tables:
+        print("Triggers table already exists")
+        return
+
+    table = db.create_table(
+        TableName="triggers",
+        KeySchema=[
+            {"AttributeName": "id", "KeyType": "HASH"}
+        ],
+        AttributeDefinitions=[
+            {"AttributeName": "id", "AttributeType": "S"}
+        ],
+        BillingMode="PAY_PER_REQUEST"
+    )
+
+    table.wait_until_exists()
+    print("Triggers table created")

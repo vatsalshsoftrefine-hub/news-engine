@@ -121,16 +121,28 @@ def get_news(category=None, limit=10):
 
 def calculate_relevance(article, interests):
     """
-    Calculate relevance score based on keyword matching
+    Improved relevance scoring using keyword mapping
     """
 
     text = f"{article.get('title', '')} {article.get('description', '')}".lower()
 
     score = 0
 
+    keyword_map = {
+        "ai": ["ai", "artificial intelligence", "machine learning"],
+        "technology": ["technology", "tech", "software", "startup"],
+        "cricket": ["cricket", "ipl"],
+        "sports": ["sports", "football", "tennis"],
+        "business": ["business", "market", "stock", "economy"]
+    }
+
     for interest in interests:
-        if interest.lower() in text:
-            score += 1
+        words = keyword_map.get(interest.lower(), [interest.lower()])
+
+        for word in words:
+            if word in text:
+                score += 1
+                break  # avoid double counting
 
     return score
 
@@ -159,7 +171,7 @@ def get_relevant_news_for_user(user_id, interests, limit=10):
 
     return scored_articles[:limit]
 
-def filter_triggered_news(articles, threshold=2):
+def filter_triggered_news(articles, threshold=1):
     """
     Filter only high relevance articles
     """

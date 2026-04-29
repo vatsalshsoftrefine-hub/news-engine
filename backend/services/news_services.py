@@ -41,12 +41,35 @@ def fetch_news_from_rss(url):
 
 def save_articles(articles):
     """
-    Save articles to DynamoDB
+    Save only new articles (deduplicated)
     """
 
     table = db_client.get_table("news_items")
 
-    for article in articles:
-        table.put_item(Item=article)
+    saved_count = 0
 
-    return len(articles)
+    for article in articles:
+
+        # Skip duplicates
+        if article_exists(article["link"]):
+            continue
+
+        table.put_item(Item=article)
+        saved_count += 1
+
+    return saved_count
+
+def article_exists(link):
+    """
+    Check if article already exists using link
+    """
+
+    table = db_client.get_table("news_items")
+
+    response = table.scan()
+
+    for item in response.get("Items", []):
+        if item.get("link") == link:
+            return True
+
+    return False

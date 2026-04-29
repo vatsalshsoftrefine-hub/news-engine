@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 import uuid
 from models.dynamodb import DynamoDBClient
+from utils.cleaner import clean_html
 
 db_client = DynamoDBClient()
 
@@ -27,7 +28,7 @@ def fetch_news_from_rss(url):
         article = {        
            "id": str(uuid.uuid4()),
            "title": item.title.text if item.title else "",
-           "description": item.description.text if item.description else "",
+           "description": clean_html(item.description.text if item.description else ""),
            "link": item.link.text if item.link else "",
            "published_at": item.pubDate.text if item.pubDate else "",
            "source": url,
@@ -98,3 +99,22 @@ def categorize_article(title, description):
         return "politics"
 
     return "general"
+
+def get_news(category=None, limit=10):
+    """
+    Fetch news from DB with optional category filter
+    """
+
+    table = db_client.get_table("news_items")
+
+    response = table.scan()
+    items = response.get("Items", [])
+
+    # Filter by category if provided
+    if category:
+        items = [item for item in items if item.get("category") == category]
+
+    # Sort by latest (optional improvement)
+    items.sort(key=lambda x: x.get("created_at", ""), reverse=True)
+
+    return items[:limit]

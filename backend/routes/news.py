@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from utils.response import success_response, error_response
-from services.news_services import fetch_news_from_rss, save_articles
+from services.news_services import fetch_news_from_rss, save_articles, get_news
 
 news_bp = Blueprint("news", __name__)
 
@@ -25,3 +25,17 @@ def ingest_news():
         {"articles_saved": count},
         "News ingested successfully"
     ), 200
+
+@news_bp.route("/news", methods=["GET"])
+def fetch_news():
+    category = request.args.get("category")
+    limit = request.args.get("limit", 10)
+
+    try:
+        limit = int(limit)
+    except:
+        limit = 10
+
+    articles = get_news(category, limit)
+
+    return success_response(articles), 200

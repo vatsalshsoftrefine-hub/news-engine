@@ -53,3 +53,6 @@ def register_error_handlers(app):
 
     from routes.interest import interest_bp
     app.register_blueprint(interest_bp)
+
+    from routes.analytics import analytics_bp
+    app.register_blueprint(analytics_bp)

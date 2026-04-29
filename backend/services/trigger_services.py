@@ -65,16 +65,17 @@ def save_triggers(user_id, articles):
     saved = []
 
     for article in articles:
-        item = {
-            "id": str(uuid.uuid4()),
-            "user_id": user_id,
-            "title": article.get("title"),
-            "link": article.get("link"),
-            "relevance_score": article.get("relevance_score"),
-            "created_at": datetime.utcnow().isoformat()
-        }
+       item = {
+           "id": str(uuid.uuid4()),
+           "user_id": user_id,
+           "title": article.get("title"),
+           "link": article.get("link"),
+           "category": article.get("category"),  
+           "relevance_score": article.get("relevance_score"),
+           "created_at": datetime.utcnow().isoformat()
+           }
 
-        table.put_item(Item=item)
-        saved.append(item)
+    table.put_item(Item=item)
+    saved.append(item)
 
     return saved

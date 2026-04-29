@@ -118,3 +118,43 @@ def get_news(category=None, limit=10):
     items.sort(key=lambda x: x.get("created_at", ""), reverse=True)
 
     return items[:limit]
+
+def calculate_relevance(article, interests):
+    """
+    Calculate relevance score based on keyword matching
+    """
+
+    text = f"{article.get('title', '')} {article.get('description', '')}".lower()
+
+    score = 0
+
+    for interest in interests:
+        if interest.lower() in text:
+            score += 1
+
+    return score
+
+
+def get_relevant_news_for_user(user_id, interests, limit=10):
+    """
+    Get news relevant to user interests
+    """
+
+    table = db_client.get_table("news_items")
+
+    response = table.scan()
+    items = response.get("Items", [])
+
+    scored_articles = []
+
+    for article in items:
+        score = calculate_relevance(article, interests)
+
+        if score > 0:
+            article["relevance_score"] = score
+            scored_articles.append(article)
+
+    # Sort by highest relevance
+    scored_articles.sort(key=lambda x: x["relevance_score"], reverse=True)
+
+    return scored_articles[:limit]

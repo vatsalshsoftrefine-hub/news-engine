@@ -4,6 +4,7 @@ import uuid
 from datetime import datetime
 from models.dynamodb import DynamoDBClient
 from services.email_services import send_email
+from services.user_services import get_user
 
 
 db_client = DynamoDBClient()
@@ -37,11 +38,19 @@ def get_triggered_news(user_id):
             for a in triggered_articles[:5]  # limit email size
         ])
 
-        send_email(
-            to_email="jaykakadia3@gmail.com", 
-            subject="🚨 News Alert!",
-            body=body
-        )
+        user = get_user(user_id)
+        user_email = user.get("email")
+        if user_email and triggered_articles:
+             body = "\n\n".join([
+                  f"{a['title']}\n{a['link']}"
+                  for a in triggered_articles[:5]
+                 ])
+             
+             send_email( 
+                to_email=user_email,
+                subject="🚨 News Alert!",
+                body=body
+                )
 
     return triggered_articles
 

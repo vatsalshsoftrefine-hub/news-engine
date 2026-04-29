@@ -47,3 +47,6 @@ def register_error_handlers(app):
             "status": "error",
             "message": "Internal server error"
         }, 500
+    
+    from routes.news import news_bp
+    app.register_blueprint(news_bp)

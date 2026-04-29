@@ -23,3 +23,27 @@ def create_users_table():
 
     table.wait_until_exists()
     print("Users table created")
+
+
+def create_news_table():
+    db = DynamoDBClient().dynamodb
+
+    existing_tables = db.meta.client.list_tables()["TableNames"]
+
+    if "news_items" in existing_tables:
+        print("News table already exists")
+        return
+
+    table = db.create_table(
+        TableName="news_items",
+        KeySchema=[
+            {"AttributeName": "id", "KeyType": "HASH"}
+        ],
+        AttributeDefinitions=[
+            {"AttributeName": "id", "AttributeType": "S"}
+        ],
+        BillingMode="PAY_PER_REQUEST"
+    )
+
+    table.wait_until_exists()
+    print("News table created")

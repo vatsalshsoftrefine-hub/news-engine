@@ -4,6 +4,7 @@ from datetime import datetime
 import uuid
 from models.dynamodb import DynamoDBClient
 from utils.cleaner import clean_html
+from services.vector_services import add_to_vector_db
 
 db_client = DynamoDBClient()
 
@@ -46,7 +47,7 @@ def fetch_news_from_rss(url):
 
 def save_articles(articles):
     """
-    Save only new articles (deduplicated)
+    Save only new articles (deduplicated) + store embeddings
     """
 
     table = db_client.get_table("news_items")
@@ -59,7 +60,12 @@ def save_articles(articles):
         if article_exists(article["link"]):
             continue
 
+        # Save to DynamoDB
         table.put_item(Item=article)
+
+        # 🔥 NEW: Save to vector DB
+        add_to_vector_db(article)
+
         saved_count += 1
 
     return saved_count

@@ -37,3 +37,17 @@ def add_to_vector_db(article):
             "category": article.get("category")
         }]
     )
+
+def search_similar_news(query, n_results=5):
+    """
+    Search similar news using embeddings
+    """
+
+    query_embedding = generate_embedding(query)
+
+    results = collection.query(
+        query_embeddings=[query_embedding],
+        n_results=n_results
+    )
+
+    return results

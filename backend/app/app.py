@@ -56,3 +56,6 @@ def register_error_handlers(app):
 
     from routes.analytics import analytics_bp
     app.register_blueprint(analytics_bp)
+
+    from routes.ai import ai_bp
+    app.register_blueprint(ai_bp)

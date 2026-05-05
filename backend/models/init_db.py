@@ -1,6 +1,5 @@
 from models.dynamodb import DynamoDBClient
 
-from models.dynamodb import DynamoDBClient
 
 db_client = DynamoDBClient()
 dynamodb = db_client.dynamodb.meta.client
@@ -103,7 +102,11 @@ def create_triggers_table():
 def create_chat_history_table():
     table_name = "chat_history"
 
-    print("Creating chat_history table...")   # ADD THIS
+    existing_tables = dynamodb.list_tables()["TableNames"]
+
+    if table_name in existing_tables:
+        print("Chat history table already exists")
+        return
 
     try:
         dynamodb.create_table(

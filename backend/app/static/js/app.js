@@ -47,7 +47,7 @@ async function searchNews() {
 
     if (!query) return;
 
-    chat.innerHTML += `<div class="card">🧑 ${query}</div>`;
+    chat.innerHTML += `<div class="card" style="background:#2563eb">🧑 ${query}</div>`;
 
     const id = Date.now();
     chat.innerHTML += `<div class="card" id="${id}">🤖 Thinking...</div>`;
@@ -65,7 +65,7 @@ async function searchNews() {
         const data = await res.json();
 
         document.getElementById(id).innerHTML =
-            `<b>🤖</b> ${data.data.answer}`;
+        `<b>🤖</b><br>${data.data.answer}`;
 
     } catch (err) {
         document.getElementById(id).innerText =
@@ -223,4 +223,25 @@ async function loadAnalytics() {
 
 if (document.getElementById("barChart")) {
     loadAnalytics();
+}
+
+async function loadChatHistory() {
+    if (!USER_ID) return;
+
+    const res = await fetch(`/ai/history/${USER_ID}`);
+    const data = await res.json();
+
+    const chat = document.getElementById("chat");
+    chat.innerHTML = "";
+
+    data.data.forEach(c => {
+        chat.innerHTML += `
+            <div class="card">🧑 ${c.query}</div>
+            <div class="card">🤖 ${c.response}</div>
+        `;
+    });
+}
+
+if (document.getElementById("chat")) {
+    loadChatHistory();
 }

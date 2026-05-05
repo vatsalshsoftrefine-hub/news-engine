@@ -84,3 +84,69 @@ button.primary {
 .news-card a:hover {
     text-decoration: underline;
 }
+
+/* ================= UI POLISH (ADDED) ================= */
+
+body {
+    background: #0f172a;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 30px;
+    background: #1e293b;
+    align-items: center;
+}
+
+.navbar a {
+    color: white;
+    margin-right: 15px;
+    text-decoration: none;
+}
+
+.navbar button {
+    background: #ef4444;
+    border: none;
+    padding: 8px 12px;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* CARDS */
+.card {
+    background: #1e293b;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 12px;
+}
+
+/* BUTTONS */
+.primary {
+    background: #3b82f6;
+    border: none;
+    padding: 10px;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* INPUT */
+input {
+    padding: 10px;
+    margin: 10px 0;
+    width: 60%;
+    border-radius: 6px;
+    border: none;
+}
+
+/* CHAT */
+#chat .card {
+    background: #334155;
+    margin-top: 10px;
+}

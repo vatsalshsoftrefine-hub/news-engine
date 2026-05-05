@@ -28,20 +28,20 @@ def save_chat(user_id, query, response):
 
 
 def get_user_chats(user_id):
-    """
-    Fetch chat history for user
-    """
-
     table = db_client.get_table("chat_history")
 
-    response = table.scan()
+    response = table.query(
+        IndexName="user_id-index",
+        KeyConditionExpression="user_id = :uid",
+        ExpressionAttributeValues={
+            ":uid": user_id
+        }
+    )
+
     items = response.get("Items", [])
 
-    user_chats = [item for item in items if item.get("user_id") == user_id]
+    items.sort(key=lambda x: x.get("created_at", ""), reverse=True)
 
-    # sort latest first
-    user_chats.sort(key=lambda x: x.get("created_at", ""), reverse=True)
-
-    return user_chats
+    return items
 
 print("DynamoDB endpoint:", db_client.dynamodb.meta.client.meta.endpoint_url)

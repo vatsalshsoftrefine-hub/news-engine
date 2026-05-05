@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Dashboard</h2>
+
+<!-- 🔹 AI CHAT -->
+<div class="card">
+    <h3>🤖 AI Search</h3>
+    <input id="query" placeholder="Ask news...">
+    <button class="primary" onclick="searchNews()">Search</button>
+
+    <div id="chat"></div>
+</div>
+
+
+<!-- 🔹 NEWS SECTION -->
+<div class="card">
+    <h3>📰 Latest News</h3>
+    <button class="primary" onclick="loadNews()">Refresh News</button>
+    <div id="news" class="news-container"></div>
+</div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,86 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI';
+    background: #0f172a;
+    color: white;
+}
+
+.sidebar {
+    width: 220px;
+    height: 100vh;
+    position: fixed;
+    background: #1e293b;
+    padding: 20px;
+}
+
+.sidebar button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    background: #334155;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.main {
+    margin-left: 240px;
+    padding: 20px;
+}
+
+.card {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+input {
+    padding: 10px;
+    width: 70%;
+    border-radius: 8px;
+    border: none;
+}
+
+button.primary {
+    padding: 10px 15px;
+    background: #3b82f6;
+    border: none;
+    color: white;
+    border-radius: 8px;
+}
+
+.news-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 15px;
+}
+
+.news-card {
+    background: #1e1e2f;
+    border-radius: 12px;
+    padding: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    color: white;
+}
+
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.news-card h4 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.news-card a {
+    color: #4da6ff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.news-card a:hover {
+    text-decoration: underline;
+}

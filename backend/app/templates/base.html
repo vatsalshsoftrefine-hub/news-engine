@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>News Engine</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+    <div class="navbar">
+      <h2>🧠 News Engine</h2>
+
+      <div>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/analytics">Analytics</a>
+        <a href="/interests">Interests</a>
+        <button onclick="logout()">Logout</button>
+      </div>
+    </div>
+
+<div class="sidebar">
+    <h2>🧠 News Engine</h2>
+    <button onclick="go('/dashboard')">Dashboard</button>
+    <button onclick="go('/interests')">Interests</button>
+    <button onclick="go('/analytics')">Analytics</button>
+    <button onclick="logout()">Logout</button>
+</div>
+
+<div class="main">
+    {% block content %}{% endblock %}
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/static/js/app.js"></script>
+
+</body>
+</html>

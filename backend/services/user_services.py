@@ -2,23 +2,30 @@ import uuid
 from models.dynamodb import DynamoDBClient
 
 db_client = DynamoDBClient()
+table = db_client.get_table("users")
 
-def create_user(name, email):
-    """
-    Create a new user
-    """
 
-    table = db_client.get_table("users")
-
-    user = {
+def create_user(name, email, password):
+    item = {
         "id": str(uuid.uuid4()),
         "name": name,
-        "email": email
+        "email": email,
+        "password": password
     }
 
-    table.put_item(Item=user)
+    table.put_item(Item=item)
+    return item
 
-    return user
+
+def get_user_by_email(email):
+    response = table.scan()
+    items = response.get("Items", [])
+
+    for user in items:
+        if user.get("email") == email:
+            return user
+
+    return None
 
 def get_all_users():
     table = db_client.get_table("users")
